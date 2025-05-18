@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js",
+    "start": "nodemon src/app.ts",
     "format": "prettier --write ."
   },
   "keywords": [],
@@ -24,6 +24,14 @@
     "nodemon": "^3.1.10"
   },
   "devDependencies": {
-    "prettier": "3.5.3"
+    "@types/bcryptjs": "^3.0.0",
+    "@types/body-parser": "^1.19.5",
+    "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^22.15.18",
+    "prettier": "3.5.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   }
 }
