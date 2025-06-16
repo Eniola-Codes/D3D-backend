@@ -10,7 +10,8 @@
     "prebuild": "npm run lint && prettier --write . && npm run type-check",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/app.ts"
+    "start": "nodemon src/app.ts",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
@@ -24,7 +25,6 @@
     "express": "^5.1.0",
     "express-session": "^1.18.1",
     "express-validator": "^7.2.1",
-    "husky": "^9.1.7",
     "ioredis": "^5.6.1",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.16.0",
@@ -46,6 +46,7 @@
     "@types/passport-google-oauth20": "^2.0.16",
     "eslint": "^9.29.0",
     "globals": "^16.2.0",
+    "husky": "^9.1.7",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "prettier": "3.5.3",
