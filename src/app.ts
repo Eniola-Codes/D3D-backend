@@ -11,6 +11,7 @@ require('./services/auth/google');
 dotenv.config();
 
 const FRONTEND_URL = process.env.FRONTEND_APPLICATION_URL;
+const PORT = process.env.PORT || 8080;
 
 const app = express();
 
@@ -44,8 +45,17 @@ app.use((error: any, req: Request, res: Response) => {
 });
 
 mongoose
-  .connect(process.env.MONGODB_CONNECTION as string)
-  .then(() => {
-    app.listen(8080, () => {});
+  .connect(process.env.MONGODB_CONNECTION as string, {
+    maxPoolSize: 10,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
   })
-  .catch(() => {});
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Database connection failed:', err);
+    process.exit(1);
+  });

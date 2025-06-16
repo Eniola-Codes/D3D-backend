@@ -9,7 +9,6 @@ export default [
   ...tseslint.configs.recommended,
   {
     rules: {
-      'no-console': 'error',
       '@typescript-eslint/no-unused-vars': 'error',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
