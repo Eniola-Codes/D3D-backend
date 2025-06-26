@@ -5,6 +5,7 @@ echo "Running pre-commit checks..."
 
 # Run build
 echo "🔨 Running build..."
+npm run verify
 npm run build
 if [ $? -ne 0 ]; then
   echo "❌ Build failed. Commit aborted."
