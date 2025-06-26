@@ -24,8 +24,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes);
+// app.use('/api/auth', authRoutes);
+// app.use('/api/user', userRoutes);
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 app.get('/auth/google/callback', (req, res, next) => {
   passport.authenticate('google', { session: false }, async (err, user) => {
@@ -55,7 +55,7 @@ mongoose
       console.log(`Server running on port ${PORT}`);
     });
   })
-  .catch((err) => {
+  .catch(err => {
     console.error('Database connection failed:', err);
     process.exit(1);
   });
