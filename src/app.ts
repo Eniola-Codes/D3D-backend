@@ -38,9 +38,10 @@ app.get('/auth/google/callback', (req: Request, res: Response, next: NextFunctio
 });
 
 app.use((error: any, req: Request, res: Response) => {
+  const status = error.statusCode || 500;
   const message = error.message;
   const data = error.data;
-  res.json({ message, data });
+  res.status(status).json({ message, data });
 });
 
 mongoose
