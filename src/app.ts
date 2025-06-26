@@ -24,8 +24,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-// app.use('/api/auth', authRoutes);
-// app.use('/api/user', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 app.get('/auth/google/callback', (req, res, next) => {
   passport.authenticate('google', { session: false }, async (err, user) => {
