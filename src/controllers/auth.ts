@@ -48,7 +48,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
 
     res.status(201).json({
       token,
-      user: { id: newUser._id, email: newUser.email },
+      user: { id: newUser._id, email: newUser.email, name: newUser.name },
       message: 'User created successfully!',
     });
   } catch (error: any) {
@@ -83,7 +83,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
     res.status(200).json({
       token,
-      user: { id: loadedUser._id, email: loadedUser.email },
+      user: { id: loadedUser._id, email: loadedUser.email, name: loadedUser.name },
       message: 'User authenticated successfully!',
     });
   } catch (error: any) {
