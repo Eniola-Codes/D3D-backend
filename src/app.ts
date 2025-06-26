@@ -38,14 +38,17 @@ app.get('/auth/google/callback', (req: Request, res: Response, next: NextFunctio
 });
 
 app.use((error: any, req: Request, res: Response) => {
-  const status = error.statusCode || 500;
   const message = error.message;
   const data = error.data;
-  res.status(status).json({ message, data });
+  res.json({ message, data });
 });
 
 mongoose
-  .connect(process.env.MONGODB_CONNECTION as string)
+  .connect(process.env.MONGODB_CONNECTION as string, {
+    maxPoolSize: 10,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+  })
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
