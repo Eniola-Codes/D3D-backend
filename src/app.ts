@@ -37,7 +37,7 @@ app.get('/auth/google/callback', (req: Request, res: Response, next: NextFunctio
   })(req, res, next);
 });
 
-app.use((error: any, req: Request, res: Response) => {
+app.use((error: any, req: Request, res: Response, _next: NextFunction): void => {
   const status = error.statusCode || 500;
   const message = error.message;
   const data = error.data;
