@@ -27,7 +27,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-app.get('/auth/google/callback', (req, res, next) => {
+app.get('/auth/google/callback', (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate('google', { session: false }, async (err, user) => {
     if (err || !user) {
       return res.redirect(`${FRONTEND_URL}/account?auth=login&error=true`);
