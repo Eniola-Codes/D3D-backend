@@ -45,11 +45,7 @@ app.use((error: any, req: Request, res: Response) => {
 });
 
 mongoose
-  .connect(process.env.MONGODB_CONNECTION as string, {
-    maxPoolSize: 10,
-    serverSelectionTimeoutMS: 5000,
-    socketTimeoutMS: 45000,
-  })
+  .connect(process.env.MONGODB_CONNECTION as string)
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
