@@ -10,7 +10,8 @@
     "prebuild": "npm run lint && prettier --write . && npm run type-check",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/app.ts",
+    "start": "node dist/app.js",
+    "dev": "nodemon src/app.ts",
     "prepare": "husky"
   },
   "keywords": [],
