@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import { body } from 'express-validator';
 import * as authController from '../controllers/auth';
-const isAuth = require('../middleware/auth');
+import isAuth from '../middleware/auth';
 
 const router: Router = express.Router();
 
@@ -47,7 +47,5 @@ router.put(
 router.post('/login', authController.login);
 
 router.post('/logout', isAuth, authController.logout);
-
-router.get('/verify-auth', isAuth, authController.verifyAuth);
 
 export default router;

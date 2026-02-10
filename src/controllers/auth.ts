@@ -4,23 +4,29 @@ import dotenv from 'dotenv';
 import User from '../models/user';
 import { sendEmail } from '../services/email';
 import { getOtpView } from '../views/emails/get-otp';
-import { createAndStoreOTP, verifyOTP } from '../services/otp';
+import { createAndStoreOTP, verifyOTP } from '../lib/utils/otp';
 import { resetPasswordView } from '../views/emails/reset-password';
 import { blackListToken, generateJwt } from '../lib/utils/auth';
+import {
+  CANNOT_USE_YOUR_PREVIOUS_PASSWORD,
+  EMAIL_ALREADY_USED,
+  EMAIL_NOT_ASSOCIATED_WITH_ACCOUNT,
+  EMAIL_SENT_SUCCESSFULLY,
+  INVALID_EMAIL_OR_PASSWORD,
+  LOGOUT_SUCCESSFUL,
+  LOGOUT_UNSUCCESSFUL,
+  OTP_EXPIRED_OR_INVALID,
+  OTP_VERIFIED_SUCCESSFULLY,
+  PASSWORD_CHANGED_SUCCESSFULLY,
+  PASSWORD_RESET_SUCCESSFUL,
+  RESET_PASSWORD_TIMED_OUT,
+  SOMETHING_WENT_WRONG,
+  USER_AUTHENTICATED_SUCCESSFULLY,
+  USER_CREATED_SUCCESSFULLY,
+  YOUR_PASSWORD_RESET_CODE
+} from '../lib/constants/messages';
 
 dotenv.config();
-
-export const verifyAuth = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    res.status(200).json({
-      message: 'User authenticated successfully!',
-    });
-    return;
-  } catch (err: any) {
-    if (!err.statusCode) err.statusCode = 500;
-    next(err);
-  }
-};
 
 export const signup = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password, name } = req.body;
@@ -30,7 +36,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       res.status(409).json({
-        message: 'The email has already been used, please use another email.',
+        message: EMAIL_ALREADY_USED,
       });
       return;
     }
@@ -49,7 +55,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
     res.status(201).json({
       token,
       user: { id: newUser._id, email: newUser.email, name: newUser.name },
-      message: 'User created successfully!',
+      message: USER_CREATED_SUCCESSFULLY,
     });
   } catch (error: any) {
     if (!error.statusCode) error.statusCode = 500;
@@ -65,7 +71,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     const user = await User.findOne({ email });
     if (!user) {
       res.status(401).json({
-        message: 'Invalid email or password, please try again.',
+        message: INVALID_EMAIL_OR_PASSWORD,
       });
       return;
     }
@@ -74,7 +80,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     const isEqual = await bcrypt.compare(password, user.password);
     if (!isEqual) {
       res.status(401).json({
-        message: 'Invalid email or password, please try again.',
+        message: INVALID_EMAIL_OR_PASSWORD,
       });
       return;
     }
@@ -84,7 +90,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     res.status(200).json({
       token,
       user: { id: loadedUser._id, email: loadedUser.email, name: loadedUser.name },
-      message: 'User authenticated successfully!',
+      message: USER_AUTHENTICATED_SUCCESSFULLY,
     });
   } catch (error: any) {
     if (!error.statusCode) error.statusCode = 500;
@@ -98,14 +104,14 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
 
     if (!token) {
       res.status(401).json({
-        message: 'Logout unsuccessful, please try again',
+        message: LOGOUT_UNSUCCESSFUL,
       });
       return;
     }
 
     await blackListToken(token);
 
-    res.status(200).json({ message: 'Logout successful' });
+    res.status(200).json({ message: LOGOUT_SUCCESSFUL });
   } catch (err: any) {
     if (!err.statusCode) err.statusCode = 500;
     next(err);
@@ -115,20 +121,20 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
 export const forgetPassword = async (req: Request, res: Response, next: NextFunction) => {
   const { email } = req.body;
   const fromEmail = process.env.EMAIL_USER as string;
-  const subject = 'Your Password Reset Code';
+  const subject = YOUR_PASSWORD_RESET_CODE;
 
   try {
     const user = await User.findOne({ email });
     if (!user) {
       res.status(401).json({
-        message: 'This email is not associated with an account, please try again.',
+        message: EMAIL_NOT_ASSOCIATED_WITH_ACCOUNT,
       });
       return;
     }
     const token = await createAndStoreOTP(email);
     if (!token) {
       res.status(400).json({
-        message: 'Something went wrong, please try again.',
+        message: SOMETHING_WENT_WRONG,
       });
       return;
     }
@@ -143,14 +149,14 @@ export const forgetPassword = async (req: Request, res: Response, next: NextFunc
     const emailSuccess = await sendEmail(mailOptions);
     if (!emailSuccess) {
       res.status(400).json({
-        message: 'Something went wrong, please try again.',
+        message: SOMETHING_WENT_WRONG,
       });
       return;
     }
 
     res.status(200).json({
       email: email,
-      message: 'Email sent successfully!',
+      message: EMAIL_SENT_SUCCESSFULLY,
     });
   } catch (error: any) {
     if (!error.statusCode) error.statusCode = 500;
@@ -165,21 +171,21 @@ export const verifyOtp = async (req: Request, res: Response, next: NextFunction)
     const user = await User.findOne({ email });
     if (!user) {
       res.status(401).json({
-        message: 'This email is not associated with an account, please try again.',
+        message: EMAIL_NOT_ASSOCIATED_WITH_ACCOUNT,
       });
       return;
     }
     const verifyToken = await verifyOTP(email, otp, false);
     if (!verifyToken) {
       res.status(400).json({
-        message: 'The Otp code is expired or invalid, please resend an OTP and try again',
+        message: OTP_EXPIRED_OR_INVALID,
       });
       return;
     }
 
     res.status(200).json({
       email: email,
-      message: 'OTP verified successfully!',
+      message: OTP_VERIFIED_SUCCESSFULLY,
     });
   } catch (error: any) {
     if (!error.statusCode) error.statusCode = 500;
@@ -190,13 +196,13 @@ export const verifyOtp = async (req: Request, res: Response, next: NextFunction)
 export const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password, otp } = req.body;
   const fromEmail = process.env.EMAIL_USER as string;
-  const subject = 'Password Reset Successful';
+  const subject = PASSWORD_RESET_SUCCESSFUL;
 
   try {
     const user = await User.findOne({ email });
     if (!user) {
       res.status(401).json({
-        message: 'This email is not associated with an account, please try again.',
+        message: EMAIL_NOT_ASSOCIATED_WITH_ACCOUNT,
       });
       return;
     }
@@ -205,7 +211,7 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
     const isPasswordEqual = await bcrypt.compare(password, user.password);
     if (isPasswordEqual) {
       res.status(400).json({
-        message: 'You cannot use your previous password, please use a new password',
+        message: CANNOT_USE_YOUR_PREVIOUS_PASSWORD,
       });
       return;
     }
@@ -213,7 +219,7 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
     const verifyToken = await verifyOTP(email, otp, true);
     if (!verifyToken) {
       res.status(400).json({
-        message: 'The reset password process has timed out, please go back and try again',
+        message: RESET_PASSWORD_TIMED_OUT,
       });
       return;
     }
@@ -228,7 +234,7 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
     const emailSuccess = await sendEmail(mailOptions);
     if (!emailSuccess) {
       res.status(400).json({
-        message: 'Something went wrong, please try again.',
+        message: SOMETHING_WENT_WRONG,
       });
       return;
     }
@@ -238,7 +244,7 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
 
     res.status(200).json({
       email: email,
-      message: 'Password changed successfully!',
+      message: PASSWORD_CHANGED_SUCCESSFULLY,
     });
   } catch (error: any) {
     if (!error.statusCode) error.statusCode = 500;

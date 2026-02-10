@@ -1,10 +1,10 @@
 import crypto from 'crypto';
-import Otp from '../models/otp';
+import Otp from '../../models/otp';
 
 const OTP_LENGTH = 6;
 const OTP_EXPIRE_MINUTES = 10;
 
-const generateOTP = (length = OTP_LENGTH): string => {
+export const generateOTP = (length = OTP_LENGTH): string => {
   const digits = '0123456789';
   let otp = '';
   for (let i = 0; i < length; i++) {
@@ -13,7 +13,7 @@ const generateOTP = (length = OTP_LENGTH): string => {
   return otp;
 };
 
-const hashOTP = (otp: string): string => {
+export const hashOTP = (otp: string): string => {
   return crypto.createHash('sha256').update(otp).digest('hex');
 };
 
@@ -39,14 +39,14 @@ export const verifyOTP = async (
 
   if (!record) return false;
   if (record.expiresAt < new Date()) {
-    await Otp.deleteOne({ _id: record._id }); // expire it
+    await Otp.deleteOne({ _id: record._id }); 
     return false;
   }
 
   if (record.otpHash !== otpHash) return false;
 
   if (isUseOtp) {
-    await Otp.deleteOne({ _id: record._id }); // invalidate after use
+    await Otp.deleteOne({ _id: record._id }); 
   }
 
   return true;
