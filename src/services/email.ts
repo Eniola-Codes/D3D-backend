@@ -13,13 +13,10 @@ export const sendEmail = async (mailOptions: IMailOptions): Promise<boolean> => 
       html: mailOptions.html,
     });
     if (error) {
-      console.log(error);
       return false;
     }
-    console.log(data);
     return true;
   } catch (error) {
-    console.log(error);
     return false;
   }
 };
