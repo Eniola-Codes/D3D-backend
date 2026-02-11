@@ -406,7 +406,7 @@ describe('forgetPassword', () => {
     expect(createAndStoreOTP).toHaveBeenCalledWith(email);
     expect(getOtpView).toHaveBeenCalledWith(otpToken);
     expect(sendEmail).toHaveBeenCalledWith({
-      from: process.env.EMAIL_USER,
+      from: process.env.RESEND_EMAIL_USER,
       to: email,
       subject: YOUR_PASSWORD_RESET_CODE,
       html: '<html>OTP: 123456</html>',
@@ -440,7 +440,7 @@ describe('forgetPassword', () => {
     expect(createAndStoreOTP).toHaveBeenCalledWith(email);
     expect(getOtpView).toHaveBeenCalledWith(otpToken);
     expect(sendEmail).toHaveBeenCalledWith({
-      from: process.env.EMAIL_USER,
+      from: process.env.RESEND_EMAIL_USER,
       to: email,
       subject: YOUR_PASSWORD_RESET_CODE,
       html: '<html>OTP: 123456</html>',
@@ -653,7 +653,7 @@ describe('resetPassword', () => {
     expect(verifyOTP).toHaveBeenCalledWith(email, otp, true);
     expect(resetPasswordView).toHaveBeenCalledWith(email);
     expect(sendEmail).toHaveBeenCalledWith({
-      from: process.env.EMAIL_USER,
+      from: process.env.RESEND_EMAIL_USER,
       to: email,
       subject: PASSWORD_RESET_SUCCESSFUL,
       html: '<html>Password reset successful</html>',
@@ -689,7 +689,7 @@ describe('resetPassword', () => {
     expect(verifyOTP).toHaveBeenCalledWith(email, otp, true);
     expect(resetPasswordView).toHaveBeenCalledWith(email);
     expect(sendEmail).toHaveBeenCalledWith({
-      from: process.env.EMAIL_USER,
+      from: process.env.RESEND_EMAIL_USER,
       to: email,
       subject: PASSWORD_RESET_SUCCESSFUL,
       html: '<html>Password reset successful</html>',

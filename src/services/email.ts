@@ -1,54 +1,25 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import { IMailOptions } from '../types/email';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const emailUser = process.env.EMAIL_USER;
-const emailPass = process.env.EMAIL_PASS;
-
-if (!emailUser || !emailPass) {
-  console.error('❌ EMAIL_USER or EMAIL_PASS not set in environment variables');
-}
-
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true, // Use SSL for port 465
-  auth: {
-    user: emailUser,
-    pass: emailPass,
-  },
-});
-
-// Verify connection on startup
-transporter.verify((error) => {
-  if (error) {
-    console.error('❌ Email transporter verification failed:', error.message);
-  } else {
-    console.log('✅ Email transporter ready');
-  }
-});
-
-export const sendEmail = (mailOptions: IMailOptions): Promise<boolean> => {
-  return new Promise(resolve => {
-    if (!emailUser || !emailPass) {
-      console.error('❌ Cannot send email: Credentials missing');
-      resolve(false);
-      return;
-    }
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('❌ Email send failed:', error.message);
-        console.error('Error details:', JSON.stringify(error, null, 2));
-        resolve(false);
-      } else if (info && info.accepted && info.accepted.length > 0) {
-        console.log('✅ Email sent to:', mailOptions.to);
-        resolve(true);
-      } else {
-        console.error('❌ Email send failed: No accepted recipients');
-        resolve(false);
-      }
+export const sendEmail = async (mailOptions: IMailOptions): Promise<boolean> => {
+  try {
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const { data, error } = await resend.emails.send({
+      from: mailOptions.from,
+      to: mailOptions.to,
+      subject: mailOptions.subject,
+      html: mailOptions.html,
     });
-  });
+    if (error) {
+      console.log(error);
+      return false;
+    }
+    console.log(data);
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 };
