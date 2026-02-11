@@ -23,7 +23,7 @@ import {
   SOMETHING_WENT_WRONG,
   USER_AUTHENTICATED_SUCCESSFULLY,
   USER_CREATED_SUCCESSFULLY,
-  YOUR_PASSWORD_RESET_CODE
+  YOUR_PASSWORD_RESET_CODE,
 } from '../lib/constants/messages';
 
 dotenv.config();
@@ -120,9 +120,9 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
 
 export const forgetPassword = async (req: Request, res: Response, next: NextFunction) => {
   const { email } = req.body;
-  const fromEmail = process.env.EMAIL_USER as string;
+  const fromEmail = process.env.RESEND_EMAIL_USER as string;
   const subject = YOUR_PASSWORD_RESET_CODE;
-
+  
   try {
     const user = await User.findOne({ email });
     if (!user) {
@@ -147,6 +147,7 @@ export const forgetPassword = async (req: Request, res: Response, next: NextFunc
     };
 
     const emailSuccess = await sendEmail(mailOptions);
+    
     if (!emailSuccess) {
       res.status(400).json({
         message: SOMETHING_WENT_WRONG,
@@ -195,7 +196,7 @@ export const verifyOtp = async (req: Request, res: Response, next: NextFunction)
 
 export const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password, otp } = req.body;
-  const fromEmail = process.env.EMAIL_USER as string;
+  const fromEmail = process.env.RESEND_EMAIL_USER as string;
   const subject = PASSWORD_RESET_SUCCESSFUL;
 
   try {
