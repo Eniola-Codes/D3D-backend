@@ -8,7 +8,7 @@
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
     "verify": "npm run lint && prettier --write . && npm run type-check",
-    "build": "tsc",
+    "build": "npm install && tsc",
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
@@ -21,6 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/node": "^22.15.31",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
     "crypto": "^1.0.1",
@@ -35,7 +36,8 @@
     "mongoose": "^8.14.2",
     "nodemailer": "^7.0.3",
     "nodemon": "^3.1.10",
-    "resend": "^6.4.2"
+    "resend": "^6.4.2",
+    "typescript": "^5.8.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
@@ -45,7 +47,6 @@
     "@types/express-session": "^1.18.1",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/mongoose": "^5.11.97",
-    "@types/node": "^22.15.31",
     "@types/nodemailer": "^6.4.17",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16",
@@ -59,7 +60,6 @@
     "prettier": "3.5.3",
     "supertest": "^7.2.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3",
     "typescript-eslint": "^8.34.0",
     "vitest": "^3.2.4"
   }
