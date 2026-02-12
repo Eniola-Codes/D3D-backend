@@ -245,7 +245,6 @@ describe('signup', () => {
 
     await signup(mockReq as Request, mockRes as Response, mockNext);
 
-    // Get the user instance that was created
     const createdUser = vi.mocked(User).mock.results[vi.mocked(User).mock.results.length - 1]?.value;
 
     expect(User.findOne).toHaveBeenCalledWith({ email });

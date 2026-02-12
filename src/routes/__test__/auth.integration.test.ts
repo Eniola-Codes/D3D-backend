@@ -191,11 +191,10 @@ describe('Auth API Integration Tests', () => {
 
   describe('PUT reset-password', () => {
     it('should reset password in database', async () => {
-      const oldPassword = await bcrypt.hash('oldpassword', 12);
       const user = new User({
         email: 'test@example.com',
         name: 'Test User',
-        password: oldPassword,
+        password: await bcrypt.hash('oldpassword', 12),
       });
       await user.save();
 
