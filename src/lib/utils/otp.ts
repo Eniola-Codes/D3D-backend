@@ -39,14 +39,14 @@ export const verifyOTP = async (
 
   if (!record) return false;
   if (record.expiresAt < new Date()) {
-    await Otp.deleteOne({ _id: record._id }); 
+    await Otp.deleteOne({ _id: record._id });
     return false;
   }
 
   if (record.otpHash !== otpHash) return false;
 
   if (isUseOtp) {
-    await Otp.deleteOne({ _id: record._id }); 
+    await Otp.deleteOne({ _id: record._id });
   }
 
   return true;

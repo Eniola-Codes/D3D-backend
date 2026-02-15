@@ -27,7 +27,6 @@ import {
   YOUR_PASSWORD_RESET_CODE,
 } from '../../lib/constants/messages';
 
-
 vi.mock('../../models/user', () => {
   const MockUser: any = vi.fn().mockImplementation((data: any) => {
     return {
@@ -39,7 +38,7 @@ vi.mock('../../models/user', () => {
   });
   MockUser.findOne = vi.fn();
   MockUser.create = vi.fn();
-  
+
   return {
     default: MockUser,
   };
@@ -245,7 +244,8 @@ describe('signup', () => {
 
     await signup(mockReq as Request, mockRes as Response, mockNext);
 
-    const createdUser = vi.mocked(User).mock.results[vi.mocked(User).mock.results.length - 1]?.value;
+    const createdUser =
+      vi.mocked(User).mock.results[vi.mocked(User).mock.results.length - 1]?.value;
 
     expect(User.findOne).toHaveBeenCalledWith({ email });
     expect(bcrypt.hash).toHaveBeenCalledWith(password, 12);
@@ -553,7 +553,7 @@ describe('resetPassword', () => {
       json: vi.fn().mockReturnThis(),
     };
     mockNext = vi.fn();
-    
+
     mockUserInstance = {
       _id: 'user123',
       email: 'test@example.com',
@@ -561,7 +561,7 @@ describe('resetPassword', () => {
       password: 'oldHashedPassword123',
       save: vi.fn().mockResolvedValue(true),
     };
-    
+
     vi.clearAllMocks();
   });
 
@@ -599,7 +599,7 @@ describe('resetPassword', () => {
     expect(bcrypt.compare).toHaveBeenCalledWith(password, mockUserInstance.password);
     expect(mockRes.status).toHaveBeenCalledWith(400);
     expect(mockRes.json).toHaveBeenCalledWith({
-        message: CANNOT_USE_YOUR_PREVIOUS_PASSWORD,
+      message: CANNOT_USE_YOUR_PREVIOUS_PASSWORD,
     });
     expect(verifyOTP).not.toHaveBeenCalled();
   });
@@ -684,7 +684,7 @@ describe('resetPassword', () => {
 
     expect(User.findOne).toHaveBeenCalledWith({ email });
     expect(bcrypt.hash).toHaveBeenCalledWith(password, 12);
-    expect(bcrypt.compare).toHaveBeenCalledWith(password, "oldHashedPassword123");
+    expect(bcrypt.compare).toHaveBeenCalledWith(password, 'oldHashedPassword123');
     expect(verifyOTP).toHaveBeenCalledWith(email, otp, true);
     expect(resetPasswordView).toHaveBeenCalledWith(email);
     expect(sendEmail).toHaveBeenCalledWith({
@@ -702,5 +702,3 @@ describe('resetPassword', () => {
     });
   });
 });
-
-
