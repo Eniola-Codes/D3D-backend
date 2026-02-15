@@ -14,22 +14,30 @@ export const LOGOUT_UNSUCCESSFUL = 'Logout unsuccessful, please try again';
 export const LOGOUT_SUCCESSFUL = 'Logout successful';
 export const EMAIL_ALREADY_USED = 'The email has already been used, please use another email.';
 export const INVALID_EMAIL_OR_PASSWORD = 'Invalid email or password, please try again.';
+export const NAME_CHARACTERS_LENGTH = 'Name must be at least 3 characters long.';
+export const INVALID_EMAIL = 'Please enter a valid email.';
+export const PASSWORD_CHARACTERS_LENGTH = 'Password must be at least 8 characters long.';
 
 //FORGET PASSWORD MESSAGES
 export const EMAIL_SENT_SUCCESSFULLY = 'Email sent successfully!';
-export const EMAIL_NOT_ASSOCIATED_WITH_ACCOUNT = 'This email is not associated with an account, please try again.';
+export const EMAIL_NOT_ASSOCIATED_WITH_ACCOUNT =
+  'This email is not associated with an account, please try again.';
 
 //VERIFY OTP MESSAGES
-export const OTP_EXPIRED_OR_INVALID = 'The Otp code is expired or invalid, please resend an OTP and try again';
+export const OTP_EXPIRED_OR_INVALID =
+  'The Otp code is expired or invalid, please resend an OTP and try again';
 export const OTP_VERIFIED_SUCCESSFULLY = 'OTP verified successfully!';
+export const OTP_CHARACTERS_LENGTH = 'OTP must be 6 numbers long.';
 
 //RESET PASSWORD MESSAGES
 export const PASSWORD_RESET_SUCCESSFUL = 'Password Reset Successful';
 export const YOUR_PASSWORD_RESET_CODE = 'Your Password Reset Code';
 export const PASSWORD_RESET_FAILED = 'Password reset failed!';
 export const PASSWORD_CHANGED_SUCCESSFULLY = 'Password changed successfully!';
-export const RESET_PASSWORD_TIMED_OUT = 'The reset password process has timed out, please go back and try again';
-export const CANNOT_USE_YOUR_PREVIOUS_PASSWORD = 'You cannot use your previous password, please use a new password';
+export const RESET_PASSWORD_TIMED_OUT =
+  'The reset password process has timed out, please go back and try again';
+export const CANNOT_USE_YOUR_PREVIOUS_PASSWORD =
+  'You cannot use your previous password, please use a new password';
 
 //USER MESSAGES
 export const USER_FOUND_SUCCESSFULLY = 'User found successfully!';

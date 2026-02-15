@@ -122,7 +122,7 @@ export const forgetPassword = async (req: Request, res: Response, next: NextFunc
   const { email } = req.body;
   const fromEmail = process.env.RESEND_EMAIL_USER as string;
   const subject = YOUR_PASSWORD_RESET_CODE;
-  
+
   try {
     const user = await User.findOne({ email });
     if (!user) {
@@ -147,7 +147,7 @@ export const forgetPassword = async (req: Request, res: Response, next: NextFunc
     };
 
     const emailSuccess = await sendEmail(mailOptions);
-    
+
     if (!emailSuccess) {
       res.status(400).json({
         message: SOMETHING_WENT_WRONG,

@@ -1,7 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import redis from '../../services/redis';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { INVALID_TOKEN, SOMETHING_WENT_WRONG, TOKEN_EXPIRED, UNAUTHORIZED_USER } from '../../lib/constants/messages';
+import {
+  INVALID_TOKEN,
+  SOMETHING_WENT_WRONG,
+  TOKEN_EXPIRED,
+  UNAUTHORIZED_USER,
+} from '../../lib/constants/messages';
 
 export const istokenValid = async (req: Request, res: Response) => {
   const authHeader = req.get('Authorization');
@@ -23,7 +28,12 @@ export const istokenValid = async (req: Request, res: Response) => {
   return token;
 };
 
-export const decodeToken = async (token: string, req: Request, res: Response, next: NextFunction) => {
+export const decodeToken = async (
+  token: string,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string);
 
   if (decodedToken && typeof decodedToken === 'object') {
@@ -34,7 +44,7 @@ export const decodeToken = async (token: string, req: Request, res: Response, ne
     next();
   } else {
     return res.status(401).json({ message: UNAUTHORIZED_USER });
-  };
+  }
 };
 
 export const handleTokenError = (err: any, res: Response) => {
