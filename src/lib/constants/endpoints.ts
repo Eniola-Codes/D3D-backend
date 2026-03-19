@@ -21,6 +21,6 @@ export const SHOPIFY = {
   branches: {
     init: '/init',
     redirect: '/redirect',
-    getProducts: '/getProducts',
+    getProduct: '/getProduct',
   },
 };

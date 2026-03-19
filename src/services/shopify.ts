@@ -1,4 +1,7 @@
-export default () => ({
+import dotenv from 'dotenv';
+dotenv.config();
+
+export default {
     port: parseInt(process.env.PORT as string, 10),
     environment: process.env.NODE_ENV,
     apiUrl: process.env.APPLICATION_URL,
@@ -17,4 +20,4 @@ export default () => ({
             ]
         },
     },
-});
+};

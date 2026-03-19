@@ -18,9 +18,9 @@ router.get(
   );
 
   router.get(
-    SHOPIFY.branches.getProducts,
+    SHOPIFY.branches.getProduct,
     isAuth,
-    shopifyController.getproducts
+    shopifyController.getproduct
   );
   
 
