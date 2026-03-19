@@ -14,7 +14,8 @@
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
     "start": "node dist/app.js",
-    "dev": "nodemon src/app.ts"
+    "dev": "nodemon src/app.ts",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
