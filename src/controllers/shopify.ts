@@ -1,30 +1,22 @@
 import { NextFunction, Request, Response } from "express";
 import axios from 'axios';
-// controllers/shopifyOauth.controller.js
-// const router = express.Router();
-
+import config from '../services/shopify';
 let global_access_token = "";
 
-// GET /shopify/init
  export const init = async (req: Request, res: Response, next: NextFunction) => {
   const { shop } = req.query;
 
-  const clientId = process.env.SHOPIFY_CLIENT_ID;
-  const scopes = process.env.SHOPIFY_SCOPES; // comma-separated string
-  const apiUrl = process.env.API_URL;
-
   const redirectUrl =
     `https://${shop}/admin/oauth/authorize` +
-    `?client_id=${clientId}` +
-    `&scope=${scopes}` +
-    `&redirect_uri=${apiUrl}/shopify-oauth/redirect` +
+    `?client_id=${config.shopify.appProxy.clientId}` +
+    `&scope=${config.shopify.appProxy.scopes.join(',')}` +
+    `&redirect_uri=${config.apiUrl}/shopify-oauth/redirect` +
     `&state={nonce}` +
     `&grant_options[]={access_mode}`;
 
   res.redirect(302, redirectUrl);
 };
 
-// GET /shopify/redirect
 export const redirect = async (req: Request, res: Response, next: NextFunction) => {
   const { shop, code } = req.query;
 
@@ -32,8 +24,8 @@ export const redirect = async (req: Request, res: Response, next: NextFunction) 
     const response = await axios.post(
       `https://${shop}/admin/oauth/access_token`,
       {
-        client_id: process.env.SHOPIFY_CLIENT_ID,
-        client_secret: process.env.SHOPIFY_CLIENT_SECRET,
+        client_id: config.shopify.appProxy.clientId,
+        client_secret: config.shopify.appProxy.clientSecret,
         code,
       }
     );
@@ -47,8 +39,7 @@ export const redirect = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
-// GET /shopify/getproduct
-export const getproducts = async (req: Request, res: Response, next: NextFunction) => {
+export const getproduct = async (req: Request, res: Response, next: NextFunction) => {
   const { store, productid } = req.query;
 
   try {
