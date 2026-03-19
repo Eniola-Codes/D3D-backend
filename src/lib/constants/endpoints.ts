@@ -16,3 +16,11 @@ export const AUTH = {
   googleAuth: '/auth/google',
   googleAuthCallback: '/auth/google/callback',
 };
+export const SHOPIFY = {
+  base: '/api/shopify',
+  branches: {
+    init: '/init',
+    redirect: '/redirect',
+    getProducts: '/getProducts',
+  },
+};
