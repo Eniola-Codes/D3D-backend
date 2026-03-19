@@ -4,10 +4,11 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth';
 import userRoutes from './routes/user';
+import shopifyRoutes from './routes/shopify';
 import passport from 'passport';
 import { generateJwt } from './lib/utils/auth';
 import './services/auth/google';
-import { AUTH, USER } from './lib/constants/endpoints';
+import { AUTH, SHOPIFY, USER } from './lib/constants/endpoints';
 import { ERROR_REDIRECT_URL, SUCCESS_REDIRECT_URL } from './lib/constants';
 import { DATABASE_CONNECTION_FAILED, SERVER_RUNNING_ON_PORT } from './lib/constants/messages';
 
@@ -30,6 +31,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.use(AUTH.base, authRoutes);
 app.use(USER.base, userRoutes);
+app.use(SHOPIFY.base, shopifyRoutes);
 app.get(AUTH.googleAuth, passport.authenticate('google', { scope: ['profile', 'email'] }));
 app.get(AUTH.googleAuthCallback, (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate('google', { session: false }, async (err: any, user: any) => {
