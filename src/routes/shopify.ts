@@ -7,19 +7,19 @@ const router: Router = express.Router();
 
 router.get(
   SHOPIFY.branches.init,
-  isAuth,
+  // isAuth,
   shopifyController.init
 );
 
 router.get(
     SHOPIFY.branches.redirect,
-    isAuth,
+    // isAuth,
     shopifyController.redirect
   );
 
   router.get(
     SHOPIFY.branches.getProduct,
-    isAuth,
+    // isAuth,
     shopifyController.getproduct
   );
   
