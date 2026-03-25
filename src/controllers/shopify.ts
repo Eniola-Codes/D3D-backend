@@ -1,18 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import axios from 'axios';
 import config from '../services/shopify';
+import crypto from 'crypto';
+import { SHOPIFY } from "../lib/constants/endpoints";
 let global_access_token = "";
 
  export const init = async (req: Request, res: Response, next: NextFunction) => {
   const { shop } = req.query;
-
+  const nonce = crypto.randomBytes(16).toString('hex');
   const redirectUrl =
     `https://${shop}/admin/oauth/authorize` +
     `?client_id=${config.shopify.appProxy.clientId}` +
     `&scope=${config.shopify.appProxy.scopes.join(',')}` +
-    `&redirect_uri=${config.apiUrl}/shopify-oauth/redirect` +
-    `&state={nonce}` +
-    `&grant_options[]={access_mode}`;
+    `&redirect_uri=${config.apiUrl}${SHOPIFY.base}${SHOPIFY.branches.redirect}` +
+    `&state=${nonce}`;
 
   res.redirect(302, redirectUrl);
 };
