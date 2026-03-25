@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import axios from 'axios';
 import config from '../services/shopify';
 import crypto from 'crypto';
+import { SHOPIFY } from "../lib/constants/endpoints";
 let global_access_token = "";
 
  export const init = async (req: Request, res: Response, next: NextFunction) => {
@@ -11,9 +12,9 @@ let global_access_token = "";
     `https://${shop}/admin/oauth/authorize` +
     `?client_id=${config.shopify.appProxy.clientId}` +
     `&scope=${config.shopify.appProxy.scopes.join(',')}` +
-    `&redirect_uri=${config.apiUrl}/api/shopify/redirect` +
+    `&redirect_uri=${config.apiUrl}${SHOPIFY.base}${SHOPIFY.branches.redirect}` +
     `&state=${nonce}`;
-    
+
   res.redirect(302, redirectUrl);
 };
 
