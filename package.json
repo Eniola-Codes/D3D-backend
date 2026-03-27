@@ -21,6 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@shopify/shopify-api": "^11.14.1",
     "@types/node": "^22.15.31",
     "axios": "^1.13.6",
     "bcryptjs": "^3.0.2",
