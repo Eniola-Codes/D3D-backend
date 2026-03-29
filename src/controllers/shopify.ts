@@ -1,61 +1,43 @@
 import { NextFunction, Request, Response } from "express";
-import axios from 'axios';
-import config from '../services/shopify';
-import crypto from 'crypto';
 import { SHOPIFY } from "../lib/constants/endpoints";
-let global_access_token = "";
+import shopify from "../services/shopify";
 
  export const init = async (req: Request, res: Response, next: NextFunction) => {
-  const { shop } = req.query;
-  const nonce = crypto.randomBytes(16).toString('hex');
-  const redirectUrl =
-    `https://${shop}/admin/oauth/authorize` +
-    `?client_id=${config.shopify.appProxy.clientId}` +
-    `&scope=${config.shopify.appProxy.scopes.join(',')}` +
-    `&redirect_uri=${config.apiUrl}${SHOPIFY.base}${SHOPIFY.branches.redirect}` +
-    `&state=${nonce}`;
+  console.log("Hi")
+  try {
+  const response = await shopify.auth.begin({
+      shop: shopify.utils.sanitizeShop(req.query.shop as string, true)!,
+      callbackPath: `${SHOPIFY.base}${SHOPIFY.branches.redirect}`,
+      isOnline: false,
+      rawRequest: req,
+      rawResponse: res,
+    });
 
-  res.redirect(302, redirectUrl);
-};
+    console.log(response)
+    console.log("Hi2")
+  } catch (error) {
+    next(error);
+    console.log(error)
+    console.log("Hi3")
+  }};
 
 export const redirect = async (req: Request, res: Response, next: NextFunction) => {
-  const { shop, code } = req.query;
-
   try {
-    const response = await axios.post(
-      `https://${shop}/admin/oauth/access_token`,
-      {
-        client_id: config.shopify.appProxy.clientId,
-        client_secret: config.shopify.appProxy.clientSecret,
-        code,
-      }
-    );
+    const callback = await shopify.auth.callback({
+      rawRequest: req,
+      rawResponse: res,
+    });
 
-    global_access_token = response.data.access_token;
+    const { shop, accessToken } = callback.session;
 
-    res.redirect(302, `https://${shop}/admin/apps?shop=${shop}`);
-  } catch (error: any) {
-    if (!error.statusCode) error.statusCode = 500;
-    next(error);
-  }
-};
+    console.log('Access token for', shop, ':', accessToken);
 
-export const getproduct = async (req: Request, res: Response, next: NextFunction) => {
-  const { store, productid } = req.query;
+    // TODO: save session to your database here
+    // await db.saveSession(shop, accessToken);
 
-  try {
-    const productResponse = await axios.get(
-      `https://${store}/admin/api/2024-01/products/${productid}.json`,
-      {
-        headers: {
-          'X-Shopify-Access-Token': global_access_token,
-        },
-      }
-    );
-
-    res.json(productResponse.data);
-  } catch (error: any) {
-    if (!error.statusCode) error.statusCode = 500;
+    // Redirect user back to your frontend
+    res.redirect(302, `${process.env.FRONTEND_URL}/dashboard?shop=${shop}`);
+  } catch (error) {
     next(error);
   }
 };

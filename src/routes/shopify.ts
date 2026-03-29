@@ -15,13 +15,6 @@ router.get(
     SHOPIFY.branches.redirect,
     // isAuth,
     shopifyController.redirect
-  );
-
-  router.get(
-    SHOPIFY.branches.getProduct,
-    // isAuth,
-    shopifyController.getproduct
-  );
-  
+  );  
 
 export default router;
