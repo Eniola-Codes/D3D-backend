@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const shopify = shopifyApi({
-  apiKey: process.env.SHOPIFY_APP_CLIENT_ID!,           // Client ID from Partner Dashboard
-  apiSecretKey: process.env.SHOPIFY_APP_CLIENT_SECRET!, // Client Secret from Partner Dashboard
+  apiKey: process.env.SHOPIFY_APP_CLIENT_ID!,          
+  apiSecretKey: process.env.SHOPIFY_APP_CLIENT_SECRET!,
   scopes: [
     'read_customers',
     'write_customers',
@@ -14,8 +14,8 @@ const shopify = shopifyApi({
     'read_products',
     'write_products'
   ],
-  hostName: process.env.APPLICATION_URL!,  // d3d-backend.onrender.com  (no https://, no trailing slash)
-  apiVersion: ApiVersion.January25,
+  hostName: process.env.APPLICATION_URL!, 
+  apiVersion: ApiVersion.October25,
   isEmbeddedApp: false,
 });
 
