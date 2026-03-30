@@ -1,4 +1,4 @@
-import { oauthSignupOrLogin } from '../../lib/utils/auth';
+import { oauthSignupOrLogin } from '../lib/utils/auth';
 import { Profile, VerifyCallback } from 'passport-google-oauth20';
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 import passport from 'passport';

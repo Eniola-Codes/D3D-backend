@@ -6,6 +6,9 @@ export interface IUser extends Document {
   provider: { id: string; type: string };
   avatar: string;
   name: string;
+  store_token: {
+    shopify: string;
+  };
   createdAt?: Date;
   updatedAt?: Date;
 }
