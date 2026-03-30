@@ -7,7 +7,7 @@ import userRoutes from './routes/user';
 import shopifyRoutes from './routes/shopify';
 import passport from 'passport';
 import { generateJwt } from './lib/utils/auth';
-import './services/auth/google';
+import './services/google';
 import { AUTH, SHOPIFY, USER } from './lib/constants/endpoints';
 import { ERROR_REDIRECT_URL, SUCCESS_REDIRECT_URL } from './lib/constants';
 import { DATABASE_CONNECTION_FAILED, SERVER_RUNNING_ON_PORT } from './lib/constants/messages';

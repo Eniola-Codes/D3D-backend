@@ -1,5 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import { IUser } from '../types/user';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const userSchema: Schema<IUser> = new Schema(
   {
@@ -17,6 +19,15 @@ const userSchema: Schema<IUser> = new Schema(
       type: { type: String, enum: ['google', 'github'] },
     },
     avatar: { type: String },
+    store_token: {
+      type: {
+        shopify: {
+          type: String,
+          default: process.env.SHOPIFY_APP_ACCESS_TOKEN,
+        },
+      },
+      default: {},
+    },
   },
   { timestamps: true }
 );
