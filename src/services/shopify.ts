@@ -15,7 +15,7 @@ const shopify = shopifyApi({
     'write_products'
   ],
   hostName: process.env.APPLICATION_URL!,  // d3d-backend.onrender.com  (no https://, no trailing slash)
-  apiVersion: ApiVersion.January25,
+  apiVersion: ApiVersion.October25,
   isEmbeddedApp: false,
 });
 
