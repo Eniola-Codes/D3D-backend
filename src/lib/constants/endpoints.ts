@@ -1,10 +1,10 @@
 //AUTHENTICATION ENDPOINTS
 export const USER = {
-  base: '/api/user',
+  base: '/api/v1/user',
   branches: { getUser: '/' },
 };
 export const AUTH = {
-  base: '/api/auth',
+  base: '/api/v1/auth',
   branches: {
     signup: '/signup',
     login: '/login',
@@ -17,7 +17,7 @@ export const AUTH = {
   googleAuthCallback: '/auth/google/callback',
 };
 export const SHOPIFY = {
-  base: '/api/shopify',
+  base: '/api/v1/shopify',
   branches: {
     init: '/init',
     redirect: '/redirect',
