@@ -47,3 +47,7 @@ export const UNAUTHORIZED_USER = 'Unauthorized. User not found.';
 //TOKEN MESSAGES
 export const TOKEN_EXPIRED = 'Token expired. Please log in again.';
 export const INVALID_TOKEN = 'Invalid token.';
+
+//PRODUCT MESSAGES
+export const PRODUCT_UPDATED_SUCCESSFULLY = 'Product updated successfully!';
+export const PRODUCTS_FETCHED_SUCCESSFULLY = 'Products returned successfully!';

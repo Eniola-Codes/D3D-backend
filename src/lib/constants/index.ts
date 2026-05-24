@@ -7,3 +7,7 @@ export const expire = 'EX';
 //GOOGLE AUTH CONSTANTS
 export const ERROR_REDIRECT_URL = '/account?auth=login&error=true';
 export const SUCCESS_REDIRECT_URL = '/account?auth=login&token=';
+
+//PRODUCT CONSTANTS
+export const PAGE_SIZE = 4;
+export const DEFAULT_PAGE = 1;
