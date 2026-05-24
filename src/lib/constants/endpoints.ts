@@ -1,7 +1,10 @@
-//AUTHENTICATION ENDPOINTS
 export const USER = {
   base: '/api/v1/user',
   branches: { getUser: '/' },
+};
+export const PRODUCTS = {
+  base: '/api/v1/products',
+  branches: { createProduct: '/create', getProducts: '/' },
 };
 export const AUTH = {
   base: '/api/v1/auth',
