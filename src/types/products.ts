@@ -8,6 +8,7 @@ export interface IProduct {
   options: string[];
   featuredImage: string;
   rating: number;
+  currency: string;
   shipping: IShipping;
   priceRange: IPriceRange;
   seo: ISEO;
@@ -19,13 +20,36 @@ export interface IProduct {
   updatedAt: Date;
 }
 
+export interface IVariant {
+  handle: string;
+  sku: string;
+  price: number;
+  inStock: boolean;
+  images: string[];
+  options: IOption[];
+  product: mongoose.Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IOption {
+  title: string;
+  values: string[];
+}
+
 export interface IBrand {
   handle: string;
   title: string;
   logo: string;
   website: string;
-  currency: string;
   shipping: IShipping;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ICategory {
+  handle: string;
+  title: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -46,19 +70,12 @@ export interface ISEO {
   description: string;
 }
 
-export interface IVariant {
-  id: string;
-  title: string;
-  price: number;
-  compareAtPrice: number;
-  available: boolean;
-  sku: string;
-  barcode: string;
-  images: string[];
-}
-
 export interface IShipping {
   cost: number;
   deliveryTime: string;
 }
 
+export interface IProductFilter {
+  brand?: mongoose.Types.ObjectId;
+  categories?: mongoose.Types.ObjectId;
+}

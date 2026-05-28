@@ -23,10 +23,6 @@ const brandSchema = new Schema<IBrand>(
       type: String,
       required: true,
     },
-    currency: {
-      type: String,
-      required: true,
-    },
     shipping: {
       cost: { type: Number },
       deliveryTime: { type: String },

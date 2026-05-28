@@ -25,6 +25,10 @@ const productSchema: Schema<IProduct> = new Schema(
       type: String,
       required: true,
     },
+    currency: {
+      type: String,
+      required: true,
+    },
     priceRange: { 
       minVariantPrice: { type: Number },
       maxVariantPrice: { type: Number },
