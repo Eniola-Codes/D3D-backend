@@ -51,3 +51,8 @@ export const INVALID_TOKEN = 'Invalid token.';
 //PRODUCT MESSAGES
 export const PRODUCT_UPDATED_SUCCESSFULLY = 'Product updated successfully!';
 export const PRODUCTS_FETCHED_SUCCESSFULLY = 'Products returned successfully!';
+export const INVALID_CATEGORIES = 'Invalid categories, please try again';
+
+//VARIANT MESSAGES
+export const VARIANT_CREATED_SUCCESSFULLY = 'Variant created successfully!';
+export const VARIANTS_FETCHED_SUCCESSFULLY = 'Variants returned successfully!';

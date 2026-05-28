@@ -6,6 +6,10 @@ export const PRODUCTS = {
   base: '/api/v1/products',
   branches: { createProduct: '/create', getProducts: '/' },
 };
+export const VARIANTS = {
+  base: '/api/v1/variants',
+  branches: { createVariant: '/create', getVariants: '/' },
+};
 export const AUTH = {
   base: '/api/v1/auth',
   branches: {
