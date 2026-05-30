@@ -8,6 +8,7 @@ import {
 } from '../lib/constants/messages';
 import {
   buildProductFilter,
+  buildProductSort,
   generateHandle,
 } from '../lib/utils/product';
 import { DEFAULT_PAGE, PAGE_SIZE } from '../lib/constants';
@@ -117,6 +118,7 @@ export const getProducts = async (req: Request, res: Response, next: NextFunctio
   try {
     const page = Number(req.query.page) || DEFAULT_PAGE;
     const filter = await buildProductFilter(req.query);
+    const sort = buildProductSort(req.query.sort);
 
     if (filter === null) {
       return res.status(200).json({
@@ -136,7 +138,7 @@ export const getProducts = async (req: Request, res: Response, next: NextFunctio
       Product.find(filter)
         .select('title handle featuredImage rating description brand priceRange currency')
         .populate('brand', 'handle logo title')
-        .sort({ createdAt: -1 })
+        .sort(sort)
         .skip((page - 1) * PAGE_SIZE)
         .limit(PAGE_SIZE)
         .lean(),

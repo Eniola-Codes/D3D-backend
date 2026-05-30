@@ -74,8 +74,3 @@ export interface IShipping {
   cost: number;
   deliveryTime: string;
 }
-
-export interface IProductFilter {
-  brand?: mongoose.Types.ObjectId;
-  categories?: mongoose.Types.ObjectId;
-}
