@@ -10,6 +10,7 @@ import {
   buildProductFilter,
   buildProductSort,
   generateHandle,
+  resolveImageUrl,
 } from '../lib/utils/product';
 import { DEFAULT_PAGE, PAGE_SIZE } from '../lib/constants';
 import mongoose from 'mongoose';
@@ -39,10 +40,11 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
     if (existingBrand) {
       brandDocument = existingBrand;
     } else {
+      const normalizedLogo = await resolveImageUrl(brand.logo, brandHandle, 'brand');
       brandDocument = new Brand({
         handle: brandHandle,
         title: brand.title,
-        logo: brand.logo,
+        logo: normalizedLogo,
         website: brand.website,
         shipping: brand.shipping,
       });
@@ -63,6 +65,8 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
       }
     }
 
+    const normalizedFeaturedImage = await resolveImageUrl(featuredImage, brandDocument.handle, 'product');
+
     const productHandle = generateHandle(title, brandDocument.handle);
     const productDocument = await Product.findOneAndUpdate(
       { handle: productHandle },
@@ -73,7 +77,7 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
           url,
           description,
           options,
-          featuredImage,
+          featuredImage: normalizedFeaturedImage,
           shipping,
           rating,
           reviews,

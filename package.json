@@ -21,6 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.967.0",
     "@shopify/shopify-api": "^11.14.1",
     "@types/node": "^22.15.31",
     "axios": "^1.13.6",
