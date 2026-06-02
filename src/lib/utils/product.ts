@@ -2,9 +2,10 @@ import Brand from '../../models/brand';
 import Category from '../../models/category';
 import { FilterQuery, SortOrder } from 'mongoose';
 import { IPriceRange, IProduct } from '../../types/products';
+import { createPutObjectCommand, r2 } from '../../services/bucket';
 
 export const generateHandle = (item: string, title?: string) => {
-  const text = title ? item + '-' + title : item;
+  const text = title ? title + '-' + item : item;
 
   return text
     .toLowerCase()
@@ -104,4 +105,38 @@ export const getUpdatedPriceRange = (
   };
 };
 
+export async function resolveImageUrl(imageUrl: string, handle: string, type: 'product' | 'brand'): Promise<string> {
+  const baseUrl = process.env.R2_PUBLIC_URL;
+  let defaultImageUrl: string = '';
 
+  if (type === 'product') {
+    defaultImageUrl = `${baseUrl}/${type}/${process.env.NODE_ENV === 'production' ? '' : 'dev/'}${process.env.R2_DEFAULT_IMAGE_URL}`;
+  }
+
+  try {
+    const response = await fetch(imageUrl, { redirect: 'follow' });
+    if (!response.ok) {
+      return defaultImageUrl;
+    }
+
+    const contentType = response.headers.get('content-type') ?? '';
+    if (!contentType.startsWith('image/')) {
+      return defaultImageUrl;
+    }
+
+    const buffer = Buffer.from(await response.arrayBuffer());
+
+    const imageKey = imageUrl.slice(imageUrl.lastIndexOf('/') + 1).split('?')[0];
+    const key = `${type}/${process.env.NODE_ENV === 'production' ? '' : 'dev/'}${handle}-${imageKey}`;
+
+    const r2Response = await r2.send(createPutObjectCommand(buffer, key));
+
+    if (r2Response.$metadata.httpStatusCode !== 200) {
+      return defaultImageUrl;
+    }
+
+    return `${baseUrl}/${key}`;
+  } catch {
+    return defaultImageUrl;
+  }
+}
