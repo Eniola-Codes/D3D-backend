@@ -120,6 +120,10 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
 
 export const forgetPassword = async (req: Request, res: Response, next: NextFunction) => {
   const { email } = req.body;
+
+  let isTestOtp = false;
+  if (email === process.env.TEST_EMAIL) isTestOtp = true;
+
   const fromEmail = process.env.RESEND_EMAIL_USER as string;
   const subject = YOUR_PASSWORD_RESET_CODE;
 
@@ -131,7 +135,7 @@ export const forgetPassword = async (req: Request, res: Response, next: NextFunc
       });
       return;
     }
-    const token = await createAndStoreOTP(email);
+    const token = await createAndStoreOTP(email, isTestOtp);
     if (!token) {
       res.status(400).json({
         message: SOMETHING_WENT_WRONG,
