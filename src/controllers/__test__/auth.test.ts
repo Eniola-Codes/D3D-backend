@@ -374,7 +374,7 @@ describe('forgetPassword', () => {
     await forgetPassword(mockReq as Request, mockRes as Response, mockNext);
 
     expect(User.findOne).toHaveBeenCalledWith({ email });
-    expect(createAndStoreOTP).toHaveBeenCalledWith(email);
+    expect(createAndStoreOTP).toHaveBeenCalledWith(email, false);
     expect(mockRes.status).toHaveBeenCalledWith(400);
     expect(mockRes.json).toHaveBeenCalledWith({
       message: SOMETHING_WENT_WRONG,
@@ -402,7 +402,7 @@ describe('forgetPassword', () => {
     await forgetPassword(mockReq as Request, mockRes as Response, mockNext);
 
     expect(User.findOne).toHaveBeenCalledWith({ email });
-    expect(createAndStoreOTP).toHaveBeenCalledWith(email);
+    expect(createAndStoreOTP).toHaveBeenCalledWith(email, false);
     expect(getOtpView).toHaveBeenCalledWith(otpToken);
     expect(sendEmail).toHaveBeenCalledWith({
       from: process.env.RESEND_EMAIL_USER,
@@ -436,7 +436,7 @@ describe('forgetPassword', () => {
     await forgetPassword(mockReq as Request, mockRes as Response, mockNext);
 
     expect(User.findOne).toHaveBeenCalledWith({ email });
-    expect(createAndStoreOTP).toHaveBeenCalledWith(email);
+    expect(createAndStoreOTP).toHaveBeenCalledWith(email, false);
     expect(getOtpView).toHaveBeenCalledWith(otpToken);
     expect(sendEmail).toHaveBeenCalledWith({
       from: process.env.RESEND_EMAIL_USER,

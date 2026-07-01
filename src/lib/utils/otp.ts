@@ -17,13 +17,12 @@ export const hashOTP = (otp: string): string => {
   return crypto.createHash('sha256').update(otp).digest('hex');
 };
 
-export const createAndStoreOTP = async (email: string): Promise<string> => {
-  const otp = generateOTP();
+export const createAndStoreOTP = async (email: string, isTestOtp: boolean): Promise<string> => {
+  const otp = isTestOtp ? '123456' : generateOTP();
   const otpHash = hashOTP(otp);
   const expiresAt = new Date(Date.now() + OTP_EXPIRE_MINUTES * 60000);
 
   await Otp.deleteMany({ email });
-
   await Otp.create({ email, otpHash, expiresAt });
 
   return otp;
