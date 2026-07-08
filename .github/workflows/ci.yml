@@ -7,7 +7,6 @@ on:
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
     environment: Preview
     env:
       GOOGLE_CALLBACK_URL: ${{ vars.GOOGLE_CALLBACK_URL }}
