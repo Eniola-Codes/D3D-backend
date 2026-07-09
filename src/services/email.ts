@@ -6,7 +6,7 @@ dotenv.config();
 export const sendEmail = async (mailOptions: IMailOptions): Promise<boolean> => {
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
-    const { data, error } = await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: mailOptions.from,
       to: mailOptions.to,
       subject: mailOptions.subject,
@@ -16,7 +16,7 @@ export const sendEmail = async (mailOptions: IMailOptions): Promise<boolean> => 
       return false;
     }
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 };

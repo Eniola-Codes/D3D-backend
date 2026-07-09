@@ -31,7 +31,7 @@ describe('createAndStoreOTP', () => {
       expiresAt: new Date(),
     });
 
-    const result = await realCreateAndStoreOTP(email);
+    const result = await realCreateAndStoreOTP(email, false);
 
     expect(Otp.deleteMany).toHaveBeenCalledWith({ email });
     expect(Otp.create).toHaveBeenCalledWith({
@@ -50,7 +50,7 @@ describe('createAndStoreOTP', () => {
     (Otp.deleteMany as any).mockResolvedValue({ deletedCount: 2 });
     (Otp.create as any).mockResolvedValue({});
 
-    await realCreateAndStoreOTP(email);
+    await realCreateAndStoreOTP(email, false);
 
     expect(Otp.deleteMany).toHaveBeenCalledWith({ email });
     expect(Otp.deleteMany).toHaveBeenCalledBefore(Otp.create as any);
@@ -63,12 +63,14 @@ describe('createAndStoreOTP', () => {
     (Otp.deleteMany as any).mockResolvedValue({ deletedCount: 0 });
     (Otp.create as any).mockImplementation((data: any) => {
       const expiresAt = data.expiresAt.getTime();
-      const expectedExpiresAt = beforeTime + 10 * 60 * 1000;
-      expect(expiresAt).toBeCloseTo(expectedExpiresAt);
+      const tenMinutesMs = 10 * 60 * 1000;
+      const elapsed = expiresAt - beforeTime;
+      expect(elapsed).toBeGreaterThanOrEqual(tenMinutesMs);
+      expect(elapsed).toBeLessThanOrEqual(tenMinutesMs + 1000);
       return Promise.resolve({});
     });
 
-    await realCreateAndStoreOTP(email);
+    await realCreateAndStoreOTP(email, false);
 
     expect(Otp.create).toHaveBeenCalled();
   });
