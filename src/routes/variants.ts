@@ -9,4 +9,6 @@ router.post(VARIANTS.branches.createVariant, isAuth, variantsController.createVa
 
 router.get(VARIANTS.branches.getVariants, isAuth, variantsController.getVariants);
 
+router.get(VARIANTS.branches.getVariant, isAuth, variantsController.getVariant);
+
 export default router;

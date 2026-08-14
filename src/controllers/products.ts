@@ -3,6 +3,7 @@ import Brand from '../models/brand';
 import Category from '../models/category';
 import Product from '../models/products';
 import {
+  PRODUCT_NOT_FOUND,
   PRODUCT_UPDATED_SUCCESSFULLY,
   PRODUCTS_FETCHED_SUCCESSFULLY,
 } from '../lib/constants/messages';
@@ -21,7 +22,6 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
       title,
       url,
       description,
-      options,
       featuredImage,
       shipping,
       rating,
@@ -76,7 +76,6 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
           title,
           url,
           description,
-          options,
           featuredImage: normalizedFeaturedImage,
           shipping,
           rating,
@@ -100,7 +99,6 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
         handle: productDocument.handle,
         url: productDocument.url,
         description: productDocument.description,
-        options: productDocument.options,
         featuredImage: productDocument.featuredImage,
         shipping: productDocument.shipping,
         rating: productDocument.rating,
@@ -172,6 +170,23 @@ export const getProducts = async (req: Request, res: Response, next: NextFunctio
       },
       message: PRODUCTS_FETCHED_SUCCESSFULLY,
     });
+  } catch (err: any) {
+    if (!err.statusCode) err.statusCode = 500;
+    next(err);
+  }
+};
+
+
+export const getProduct = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { handle } = req.params;
+    const product = await Product.findOne({ handle });
+
+    if (!product) {
+      return res.status(404).json({ message: PRODUCT_NOT_FOUND });
+    }
+
+    res.status(200).json({ product, message: PRODUCTS_FETCHED_SUCCESSFULLY });
   } catch (err: any) {
     if (!err.statusCode) err.statusCode = 500;
     next(err);

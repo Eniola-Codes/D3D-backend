@@ -9,4 +9,6 @@ router.post(PRODUCTS.branches.createProduct, isAuth, productsController.createPr
 
 router.get(PRODUCTS.branches.getProducts, isAuth, productsController.getProducts);
 
+router.get(PRODUCTS.branches.getProduct, isAuth, productsController.getProduct);
+
 export default router;

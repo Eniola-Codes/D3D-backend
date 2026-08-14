@@ -51,8 +51,12 @@ export const INVALID_TOKEN = 'Invalid token.';
 //PRODUCT MESSAGES
 export const PRODUCT_UPDATED_SUCCESSFULLY = 'Product updated successfully!';
 export const PRODUCTS_FETCHED_SUCCESSFULLY = 'Products returned successfully!';
+export const PRODUCT_NOT_FOUND = 'Product not found';
 export const INVALID_CATEGORIES = 'Invalid categories, please try again';
 
 //VARIANT MESSAGES
 export const VARIANT_CREATED_SUCCESSFULLY = 'Variant created successfully!';
 export const VARIANTS_FETCHED_SUCCESSFULLY = 'Variants returned successfully!';
+export const VARIANT_FETCHED_SUCCESSFULLY = 'Variant returned successfully!';
+export const VARIANT_OPTION_ALREADY_EXISTS = 'Variant already exists.';
+export const VARIANT_NOT_FOUND = 'Variant not found';

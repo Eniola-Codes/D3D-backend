@@ -4,12 +4,12 @@ export const USER = {
 };
 export const PRODUCTS = {
   base: '/api/v1/products',
-  branches: { createProduct: '/create', getProducts: '/' },
+  branches: { createProduct: '/create', getProducts: '/', getProduct: '/:handle' },
 };
 export const VARIANTS = {
   base: '/api/v1/variants',
-  branches: { createVariant: '/create', getVariants: '/' },
-};
+  branches: { createVariant: '/create', getVariants: '/', getVariant: '/:handle' },
+ };
 export const AUTH = {
   base: '/api/v1/auth',
   branches: {

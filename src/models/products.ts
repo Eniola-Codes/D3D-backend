@@ -33,16 +33,10 @@ const productSchema: Schema<IProduct> = new Schema(
       minVariantPrice: { type: Number },
       maxVariantPrice: { type: Number },
     },
-    options: [
-      {
-        title: { type: String },
-        values: [
-          {
-            type: String,
-          },
-        ],
-      },
-    ],
+    options: {
+      type: [[{ title: { type: String }, value: { type: String } }]],
+      default: [],
+    },
     featuredImage: {
       type: String,
       required: true,

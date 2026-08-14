@@ -5,7 +5,7 @@ export interface IProduct {
   title: string;
   url: string;
   description: string;
-  options: string[];
+  options: IVariantOption[][];
   featuredImage: string;
   rating: number;
   currency: string;
@@ -23,18 +23,19 @@ export interface IProduct {
 export interface IVariant {
   handle: string;
   sku: string;
+  url: string;
   price: number;
   inStock: boolean;
   images: string[];
-  options: IOption[];
+  options: IVariantOption[];
   product: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface IOption {
+export interface IVariantOption {
   title: string;
-  values: string[];
+  value: string;
 }
 
 export interface IBrand {

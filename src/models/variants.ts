@@ -16,6 +16,10 @@ const variantSchema = new Schema<IVariant>(
       unique: true,
       required: true,
     },
+    url: {
+      type: String,
+      required: true,
+    },
     price: {
       type: Number,
       required: true,
@@ -33,7 +37,8 @@ const variantSchema = new Schema<IVariant>(
     options: [
       {
         title: { type: String, required: true },
-        values: [{ type: String }],
+        value: { type: String, required: true },
+        _id: false,
       },
     ],
     product: {
