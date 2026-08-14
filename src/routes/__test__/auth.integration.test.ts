@@ -437,7 +437,7 @@ describe('Auth API Integration Tests', () => {
   describe('PUT reset-password', () => {
     it('should reset password in database', async () => {
       const user = new User({
-        email: 'test@example.com',
+        email: 'test@gmail.com',
         name: 'Test User',
         password: await bcrypt.hash('oldpassword', 12),
       });
@@ -447,14 +447,14 @@ describe('Auth API Integration Tests', () => {
       const otp = '123456';
       const otpHash = crypto.createHash('sha256').update(otp).digest('hex');
       const otpRecord = new Otp({
-        email: 'test@example.com',
+        email: 'test@gmail.com',
         otpHash,
         expiresAt: new Date(Date.now() + 10 * 60 * 1000),
       });
       await otpRecord.save();
 
       const resetData = {
-        email: 'test@example.com',
+        email: 'test@gmail.com',
         otp: '123456',
         password: 'newpassword123',
       };
