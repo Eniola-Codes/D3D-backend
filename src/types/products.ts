@@ -5,6 +5,9 @@ export interface IProduct {
   title: string;
   url: string;
   description: string;
+  shortDescription: string;
+  features: { title: string; value: string }[];
+  attributes: { title: string; value: string }[];
   options: IVariantOption[][];
   featuredImage: string;
   rating: number;
@@ -12,7 +15,6 @@ export interface IProduct {
   shipping: IShipping;
   priceRange: IPriceRange;
   seo: ISEO;
-  reviews: IReview[];
   variants: mongoose.Types.ObjectId[];
   brand: IBrand;
   categories: mongoose.Types.ObjectId[];
@@ -53,12 +55,6 @@ export interface ICategory {
   title: string;
   createdAt: Date;
   updatedAt: Date;
-}
-
-export interface IReview {
-  review: string;
-  rating: number;
-  name: string;
 }
 
 export interface IPriceRange {

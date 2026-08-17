@@ -21,11 +21,12 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
     const {
       title,
       url,
+      shortDescription,
+      features,
+      attributes,
       description,
       featuredImage,
       shipping,
-      rating,
-      reviews,
       brand,
       seo,
       currency,
@@ -76,10 +77,11 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
           title,
           url,
           description,
+          shortDescription,
+          features,
+          attributes,
           featuredImage: normalizedFeaturedImage,
           shipping,
-          rating,
-          reviews,
           seo,
           currency,
           brand: brandDocument._id,
@@ -99,10 +101,12 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
         handle: productDocument.handle,
         url: productDocument.url,
         description: productDocument.description,
+        shortDescription: productDocument.shortDescription,
+        features: productDocument.features,
+        attributes: productDocument.attributes,
         featuredImage: productDocument.featuredImage,
         shipping: productDocument.shipping,
         rating: productDocument.rating,
-        reviews: productDocument.reviews,
         seo: productDocument.seo,
         currency: productDocument.currency,
         brand: productDocument.brand,
@@ -138,15 +142,15 @@ export const getProducts = async (req: Request, res: Response, next: NextFunctio
 
     const [products, count, brands, categories] = await Promise.all([
       Product.find(filter)
-        .select('title handle featuredImage rating description brand priceRange currency')
-        .populate('brand', 'handle logo title')
+        .select('title handle featuredImage rating shortDescription description brand priceRange currency options')
+        .populate('brand', 'handle logo title website')
         .sort(sort)
         .skip((page - 1) * PAGE_SIZE)
         .limit(PAGE_SIZE)
         .lean(),
       Product.countDocuments(filter),
       Brand.find()
-        .select('handle title logo')
+        .select('handle title logo website')
         .sort({ title: 1 })
         .lean(),
       Category.find()
@@ -180,7 +184,9 @@ export const getProducts = async (req: Request, res: Response, next: NextFunctio
 export const getProduct = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { handle } = req.params;
-    const product = await Product.findOne({ handle });
+    const product = await Product.findOne({ handle })
+      .populate('brand', 'handle logo title website')
+      .lean();
 
     if (!product) {
       return res.status(404).json({ message: PRODUCT_NOT_FOUND });
