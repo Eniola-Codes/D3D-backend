@@ -8,7 +8,6 @@ const productSchema: Schema<IProduct> = new Schema(
     handle: {
       type: String,
       required: true,
-      unique: true,
       lowercase: true,
       trim: true,
       match: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
@@ -37,12 +36,12 @@ const productSchema: Schema<IProduct> = new Schema(
       type: String,
       required: true,
     },
-    priceRange: { 
+    priceRange: {
       minVariantPrice: { type: Number },
       maxVariantPrice: { type: Number },
     },
     options: {
-      type: [[{ title: { type: String }, value: { type: String } }]],
+      type: [[{ title: { type: String }, value: { type: String }, hex: { type: String, required: false } }]],
       default: [],
     },
     featuredImage: {
@@ -80,8 +79,16 @@ const productSchema: Schema<IProduct> = new Schema(
       ],
       default: [],
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+      index: true,
+    },
   },
   { timestamps: true }
 );
+
+productSchema.index({ user: 1, handle: 1 }, { unique: true });
 
 export default mongoose.model<IProduct>('Product', productSchema);

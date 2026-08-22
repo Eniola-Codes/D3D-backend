@@ -10,7 +10,6 @@ export interface IProduct {
   attributes: { title: string; value: string }[];
   options: IVariantOption[][];
   featuredImage: string;
-  rating: number;
   currency: string;
   shipping: IShipping;
   priceRange: IPriceRange;
@@ -18,6 +17,7 @@ export interface IProduct {
   variants: mongoose.Types.ObjectId[];
   brand: IBrand;
   categories: mongoose.Types.ObjectId[];
+  user: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -38,6 +38,7 @@ export interface IVariant {
 export interface IVariantOption {
   title: string;
   value: string;
+  hex?: string;
 }
 
 export interface IBrand {
@@ -46,6 +47,7 @@ export interface IBrand {
   logo: string;
   website: string;
   shipping: IShipping;
+  user: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -53,6 +55,7 @@ export interface IBrand {
 export interface ICategory {
   handle: string;
   title: string;
+  user: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
