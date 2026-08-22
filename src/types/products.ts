@@ -5,17 +5,19 @@ export interface IProduct {
   title: string;
   url: string;
   description: string;
+  shortDescription: string;
+  features: { title: string; value: string }[];
+  attributes: { title: string; value: string }[];
   options: IVariantOption[][];
   featuredImage: string;
-  rating: number;
   currency: string;
   shipping: IShipping;
   priceRange: IPriceRange;
   seo: ISEO;
-  reviews: IReview[];
   variants: mongoose.Types.ObjectId[];
   brand: IBrand;
   categories: mongoose.Types.ObjectId[];
+  user: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -36,6 +38,7 @@ export interface IVariant {
 export interface IVariantOption {
   title: string;
   value: string;
+  hex?: string;
 }
 
 export interface IBrand {
@@ -44,6 +47,7 @@ export interface IBrand {
   logo: string;
   website: string;
   shipping: IShipping;
+  user: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -51,14 +55,9 @@ export interface IBrand {
 export interface ICategory {
   handle: string;
   title: string;
+  user: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
-}
-
-export interface IReview {
-  review: string;
-  rating: number;
-  name: string;
 }
 
 export interface IPriceRange {

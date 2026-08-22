@@ -7,7 +7,6 @@ const categorySchema = new Schema<ICategory>(
       type: String,
       required: true,
       trim: true,
-      unique: true,
       lowercase: true,
       match: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
     },
@@ -15,8 +14,16 @@ const categorySchema = new Schema<ICategory>(
       type: String,
       required: true,
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+      index: true,
+    },
   },
   { timestamps: true }
 );
+
+categorySchema.index({ user: 1, handle: 1 }, { unique: true });
 
 export default mongoose.model<ICategory>('Category', categorySchema);

@@ -7,7 +7,6 @@ const brandSchema = new Schema<IBrand>(
       type: String,
       required: true,
       trim: true,
-      unique: true,
       lowercase: true,
       match: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
     },
@@ -18,7 +17,6 @@ const brandSchema = new Schema<IBrand>(
     logo: {
       type: String,
     },
-
     website: {
       type: String,
       required: true,
@@ -27,8 +25,16 @@ const brandSchema = new Schema<IBrand>(
       cost: { type: Number },
       deliveryTime: { type: String },
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+      index: true,
+    },
   },
   { timestamps: true }
 );
+
+brandSchema.index({ user: 1, handle: 1 }, { unique: true });
 
 export default mongoose.model<IBrand>('Brand', brandSchema);

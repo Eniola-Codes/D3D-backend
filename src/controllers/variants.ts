@@ -18,13 +18,14 @@ import {
 
 export const createVariant = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const userId = (req.user as { id: string }).id;
     const { sku, price, url, inStock, images, options, product } = req.body;
 
     if (!sku) {
       return res.status(400).json({ message: 'SKU is required.' });
     }
 
-    const productDocument = await Product.findById(product);
+    const productDocument = await Product.findOne({ _id: product, user: userId });
     if (!productDocument) {
       res.status(404).json({ message: 'Product does not exist.' });
       return;
@@ -75,9 +76,17 @@ export const createVariant = async (req: Request, res: Response, next: NextFunct
 
 export const getVariants = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const userId = (req.user as { id: string }).id;
     const { product } = req.query;
 
-    const variants = await Variant.find({ product })
+    const productDocument = await Product.findOne({ _id: product, user: userId })
+      .select('_id')
+      .lean();
+    if (!productDocument) {
+      return res.status(404).json({ message: PRODUCT_NOT_FOUND });
+    }
+
+    const variants = await Variant.find({ product: productDocument._id })
       .sort({ createdAt: -1 })
       .lean();
 
@@ -93,9 +102,15 @@ export const getVariants = async (req: Request, res: Response, next: NextFunctio
 
 export const getVariant = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const userId = (req.user as { id: string }).id;
     const { handle } = req.params;
 
-    const product = await Product.findOne({ handle: handle.toString().toLowerCase() }).select('_id').lean();
+    const product = await Product.findOne({
+      handle: handle.toString().toLowerCase(),
+      user: userId,
+    })
+      .select('_id')
+      .lean();
     if (!product) {
       return res.status(404).json({ message: PRODUCT_NOT_FOUND });
     }

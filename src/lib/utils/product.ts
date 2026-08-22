@@ -36,16 +36,21 @@ const buildPriceFilter = (range: { min?: number; max?: number }) => {
 };
 
 export const buildProductFilter = async (
-  query: Record<string, unknown>
+  query: Record<string, unknown>,
+  userId: string
 ): Promise<FilterQuery<IProduct> | null> => {
-  const filter: FilterQuery<IProduct> = {};
+  const filter: FilterQuery<IProduct> = { user: userId };
 
   const brandHandle = query.brand ? generateHandle(String(query.brand)) : undefined;
   const categoryHandle = query.category ? generateHandle(String(query.category)) : undefined;
 
   const [brandDoc, categoryDoc] = await Promise.all([
-    brandHandle ? Brand.findOne({ handle: brandHandle }).select('_id').lean() : null,
-    categoryHandle ? Category.findOne({ handle: categoryHandle }).select('_id').lean() : null,
+    brandHandle
+      ? Brand.findOne({ handle: brandHandle, user: userId }).select('_id').lean()
+      : null,
+    categoryHandle
+      ? Category.findOne({ handle: categoryHandle, user: userId }).select('_id').lean()
+      : null,
   ]);
 
   if (brandHandle && !brandDoc) return null;

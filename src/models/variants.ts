@@ -38,6 +38,7 @@ const variantSchema = new Schema<IVariant>(
       {
         title: { type: String, required: true },
         value: { type: String, required: true },
+        hex: { type: String, required: false },
         _id: false,
       },
     ],
