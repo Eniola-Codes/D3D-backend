@@ -45,12 +45,8 @@ export const buildProductFilter = async (
   const categoryHandle = query.category ? generateHandle(String(query.category)) : undefined;
 
   const [brandDoc, categoryDoc] = await Promise.all([
-    brandHandle
-      ? Brand.findOne({ handle: brandHandle, user: userId }).select('_id').lean()
-      : null,
-    categoryHandle
-      ? Category.findOne({ handle: categoryHandle, user: userId }).select('_id').lean()
-      : null,
+    brandHandle ? Brand.findOne({ handle: brandHandle }).select('_id').lean() : null,
+    categoryHandle ? Category.findOne({ handle: categoryHandle }).select('_id').lean() : null,
   ]);
 
   if (brandHandle && !brandDoc) return null;
