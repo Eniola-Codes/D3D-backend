@@ -24,6 +24,6 @@ const categorySchema = new Schema<ICategory>(
   { timestamps: true }
 );
 
-categorySchema.index({ user: 1, handle: 1 }, { unique: true });
+categorySchema.index({ handle: 1 }, { unique: true });
 
 export default mongoose.model<ICategory>('Category', categorySchema);

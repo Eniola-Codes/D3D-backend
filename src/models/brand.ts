@@ -35,6 +35,6 @@ const brandSchema = new Schema<IBrand>(
   { timestamps: true }
 );
 
-brandSchema.index({ user: 1, handle: 1 }, { unique: true });
+brandSchema.index({ handle: 1 }, { unique: true });
 
 export default mongoose.model<IBrand>('Brand', brandSchema);

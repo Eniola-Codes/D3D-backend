@@ -34,38 +34,43 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
       categories,
     } = req.body;
 
-    let brandDocument;
-
     const brandHandle = generateHandle(brand.title);
-    const existingBrand = await Brand.findOne({ handle: brandHandle, user: userId });
-
-    if (existingBrand) {
-      brandDocument = existingBrand;
-    } else {
-      const normalizedLogo = await resolveImageUrl(brand.logo, brandHandle, 'brand');
-      brandDocument = new Brand({
-        handle: brandHandle,
-        title: brand.title,
-        logo: normalizedLogo,
-        website: brand.website,
-        shipping: brand.shipping,
-        user: userId,
-      });
-      await brandDocument.save();
-    }
+    const normalizedLogo = await resolveImageUrl(brand.logo, brandHandle, 'brand');
+    const brandDocument = await Brand.findOneAndUpdate(
+      { handle: brandHandle },
+      {
+        $set: {
+          handle: brandHandle,
+          title: brand.title,
+          logo: normalizedLogo,
+          website: brand.website,
+          shipping: brand.shipping,
+        },
+        $setOnInsert: {
+          user: userId,
+        },
+      },
+      { new: true, upsert: true }
+    );
 
     const categoryIds: mongoose.Types.ObjectId[] = [];
 
     for (const category of categories) {
       const handle = generateHandle(category);
-      const existingCategory = await Category.findOne({ handle, user: userId });
-      if (existingCategory) {
-        categoryIds.push(existingCategory._id);
-      } else {
-        const categoryDocument = new Category({ handle, title: category, user: userId });
-        await categoryDocument.save();
-        categoryIds.push(categoryDocument._id);
-      }
+      const categoryDocument = await Category.findOneAndUpdate(
+        { handle },
+        {
+          $set: {
+            handle,
+            title: category,
+          },
+          $setOnInsert: {
+            user: userId,
+          },
+        },
+        { new: true, upsert: true }
+      );
+      categoryIds.push(categoryDocument._id);
     }
 
     const normalizedFeaturedImage = await resolveImageUrl(
@@ -148,7 +153,7 @@ export const getProducts = async (req: Request, res: Response, next: NextFunctio
       });
     }
 
-    const [products, count, brands, categories] = await Promise.all([
+    const [products, count, brandIds, categoryIds] = await Promise.all([
       Product.find(filter)
         .select(
           'title handle featuredImage shortDescription brand priceRange options'
@@ -159,8 +164,19 @@ export const getProducts = async (req: Request, res: Response, next: NextFunctio
         .limit(PAGE_SIZE)
         .lean(),
       Product.countDocuments(filter),
-      Brand.find({ user: userId }).select('handle title logo website').sort({ title: 1 }).lean(),
-      Category.find({ user: userId }).select('handle title').sort({ title: 1 }).lean(),
+      Product.distinct('brand', { user: userId }),
+      Product.distinct('categories', { user: userId }),
+    ]);
+
+    const [brands, categories] = await Promise.all([
+      Brand.find({ _id: { $in: brandIds } })
+        .select('handle title logo website')
+        .sort({ title: 1 })
+        .lean(),
+      Category.find({ _id: { $in: categoryIds } })
+        .select('handle title')
+        .sort({ title: 1 })
+        .lean(),
     ]);
 
     res.status(200).json({
